@@ -1,0 +1,66 @@
+name: pinn-cfd-surrogate
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python version
+  - python=3.11
+  
+  # Core scientific computing
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - pandas>=2.0.0
+  - scikit-learn>=1.3.0
+  
+  # PyTorch (GPU support with CUDA 11.8)
+  - pytorch::pytorch::*=*cuda11.8*
+  - pytorch::pytorch-cuda=11.8
+  - pytorch::torchvision
+  - pytorch::pytorch-lightning
+  
+  # Visualization
+  - matplotlib>=3.7.0
+  - plotly>=5.14.0
+  - seaborn>=0.12.0
+  
+  # Configuration Management
+  - pyyaml>=6.0
+  - pydantic>=2.0
+  
+  # Logging and Tracking
+  - tensorboard>=2.13.0
+  
+  # Testing
+  - pytest>=7.3.0
+  - pytest-cov>=4.1.0
+  
+  # Code Quality
+  - black>=23.0.0
+  - flake8>=6.0.0
+  - isort>=5.12.0
+  - mypy>=1.3.0
+  
+  # Documentation
+  - sphinx>=6.0.0
+  
+  # Utilities
+  - tqdm>=4.65.0
+  - joblib>=1.3.0
+  
+  # Jupyter
+  - jupyter>=1.0.0
+  - jupyterlab>=4.0.0
+  - ipython>=8.0.0
+  - notebook>=7.0.0
+  
+  # Pip packages (if not available in conda)
+  - pip
+  - pip:
+    - omegaconf>=2.3.0
+    - wandb>=0.15.0
+    - nvidia-ml-py>=11.0.0
+    - python-dotenv>=1.0.0
+    - optuna>=3.0.0

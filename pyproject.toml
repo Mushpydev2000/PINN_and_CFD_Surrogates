@@ -1,0 +1,129 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pinn-cfd-surrogate"
+version = "1.0.0"
+description = "Physics-Informed Neural Networks and CFD Surrogate Modeling for Fluid Flow Prediction"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Research Author", email = "author@example.com"}
+]
+keywords = [
+    "physics-informed neural networks",
+    "PINN",
+    "CFD surrogate model",
+    "neural operators",
+    "scientific machine learning",
+    "Navier-Stokes",
+    "deep learning",
+    "scientific computing"
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "torch>=2.0.0",
+    "matplotlib>=3.7.0",
+    "plotly>=5.14.0",
+    "pyyaml>=6.0",
+    "omegaconf>=2.3.0",
+    "tensorboard>=2.13.0",
+    "tqdm>=4.65.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.3.0"
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "jupyterlab>=4.0.0",
+    "ipython>=8.0.0",
+    "notebook>=7.0.0"
+]
+tracking = [
+    "wandb>=0.15.0",
+    "tensorboard>=2.13.0"
+]
+optimization = [
+    "optuna>=3.0.0",
+    "ray>=2.0.0"
+]
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.3.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourrepo/pinn-cfd-surrogate"
+Documentation = "https://pinn-cfd-surrogate.readthedocs.io"
+Repository = "https://github.com/yourrepo/pinn-cfd-surrogate.git"
+"Bug Tracker" = "https://github.com/yourrepo/pinn-cfd-surrogate/issues"
+
+[tool.setuptools]
+packages = ["core"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_mode = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --cov=core --cov-report=html --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["core"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*"
+]

@@ -1,0 +1,61 @@
+# Physics-Informed Neural Networks and CFD Surrogate Modeling
+# Python 3.11+
+
+# Core Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+
+# NVIDIA PhysicsNeMo (if available)
+# Note: Installation may vary by NVIDIA version
+# See: https://github.com/NVIDIA/modulus
+
+# Visualization
+matplotlib>=3.7.0
+plotly>=5.14.0
+seaborn>=0.12.0
+
+# Configuration Management
+pyyaml>=6.0
+omegaconf>=2.3.0
+
+# Logging and Experiment Tracking
+tensorboard>=2.13.0
+wandb>=0.15.0
+
+# Testing
+pytest>=7.3.0
+pytest-cov>=4.1.0
+
+# Code Quality
+black>=23.0.0
+flake8>=6.0.0
+isort>=5.12.0
+mypy>=1.3.0
+
+# Documentation
+sphinx>=6.0.0
+sphinx-rtd-theme>=1.3.0
+
+# Utilities
+tqdm>=4.65.0
+python-dotenv>=1.0.0
+joblib>=1.3.0
+
+# Optional: GPU monitoring
+nvidia-ml-py>=11.0.0
+
+# Optional: Jupyter and notebooks
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipython>=8.0.0
+notebook>=7.0.0
+
+# Optional: Advanced optimization
+optuna>=3.0.0
+django>=4.2

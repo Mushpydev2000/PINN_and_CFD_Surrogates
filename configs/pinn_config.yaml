@@ -1,0 +1,189 @@
+# Physics-Informed Neural Network Configuration
+# ============================================
+
+project:
+  name: "PINN Navier-Stokes Solver"
+  description: "Physics-Informed Neural Network for solving 2D incompressible Navier-Stokes equations"
+  version: "1.0.0"
+
+# Domain Configuration
+domain:
+  # Spatial domain: [x_min, x_max] x [y_min, y_max]
+  x_bounds: [-1.0, 1.0]
+  y_bounds: [-1.0, 1.0]
+  
+  # Reynolds number
+  reynolds_number: 100.0
+  
+  # Kinematic viscosity (related to Re: Re = U*L/nu)
+  viscosity: 0.01
+
+# Collocation Points (sampling strategy)
+collocation:
+  # Number of interior collocation points for PDE residual
+  n_interior: 10000
+  
+  # Number of boundary collocation points
+  n_boundary: 2000
+  
+  # Sampling strategy: 'uniform', 'random', 'lhs' (Latin Hypercube)
+  sampling_strategy: "random"
+  
+  # Random seed for reproducibility
+  seed: 42
+
+# Boundary Conditions
+boundary_conditions:
+  # Type: "dirichlet", "neumann", "periodic"
+  inlet:
+    type: "dirichlet"
+    u_value: 1.0
+    v_value: 0.0
+    description: "Constant inlet velocity"
+  
+  outlet:
+    type: "neumann"
+    description: "Zero gradient outlet"
+  
+  wall:
+    type: "dirichlet"
+    u_value: 0.0
+    v_value: 0.0
+    description: "No-slip wall boundary condition"
+
+# Neural Network Architecture
+network:
+  # Input features: [x, y, t] (time optional)
+  n_inputs: 2
+  
+  # Output features: [u, v, p] (u velocity, v velocity, pressure)
+  n_outputs: 3
+  
+  # Number of hidden layers
+  n_hidden_layers: 6
+  
+  # Number of neurons per hidden layer
+  n_neurons: 256
+  
+  # Activation function: 'relu', 'tanh', 'sin', 'swish'
+  activation: "tanh"
+  
+  # Weight initialization: 'xavier', 'he', 'normal'
+  weight_init: "xavier"
+  
+  # Use residual connections
+  use_residual: false
+  
+  # Batch normalization
+  use_batch_norm: false
+
+# Training Configuration
+training:
+  # Number of training epochs
+  epochs: 5000
+  
+  # Batch size
+  batch_size: 256
+  
+  # Learning rate
+  learning_rate: 0.001
+  
+  # Learning rate scheduler: 'exponential', 'cosine', 'step', 'none'
+  lr_scheduler: "exponential"
+  lr_decay_rate: 0.9999
+  
+  # Optimizer: 'adam', 'lbfgs', 'sgd'
+  optimizer: "adam"
+  
+  # Gradient clipping
+  gradient_clip: 1.0
+  
+  # Early stopping
+  early_stopping: true
+  early_stopping_patience: 200
+  early_stopping_metric: "val_loss"
+  
+  # Checkpoint frequency (save every N epochs)
+  checkpoint_freq: 100
+  
+  # Device: 'auto', 'cuda', 'cpu'
+  device: "auto"
+
+# Loss Function Weights
+losses:
+  # Weight for PDE residual loss (continuity + momentum equations)
+  pde_weight: 1.0
+  
+  # Weight for boundary condition loss
+  bc_weight: 100.0
+  
+  # Weight for data fitting loss (if using measurements)
+  data_weight: 1.0
+  
+  # Loss function type: 'mse', 'l1', 'huber'
+  loss_type: "mse"
+
+# Data Configuration
+data:
+  # Directory for generated data
+  output_dir: "data/generated"
+  
+  # Whether to generate synthetic data
+  generate_synthetic: true
+  
+  # Save training data
+  save_training_data: true
+
+# Validation Configuration
+validation:
+  # Validation split ratio
+  val_split: 0.2
+  
+  # Number of validation points
+  n_val_points: 5000
+  
+  # Compute validation loss every N epochs
+  val_freq: 50
+
+# Logging and Visualization
+logging:
+  # Logging directory
+  log_dir: "logs"
+  
+  # Log frequency (every N iterations)
+  log_freq: 100
+  
+  # TensorBoard logging
+  use_tensorboard: true
+  
+  # Verbose output
+  verbose: true
+  
+  # Save figures
+  save_figures: true
+  figure_dir: "figures"
+
+# Model Saving and Loading
+model:
+  # Model checkpoint directory
+  checkpoint_dir: "checkpoints"
+  
+  # Save best model
+  save_best: true
+  
+  # Model format: 'pt', 'onnx'
+  save_format: "pt"
+
+# Physical Parameters
+physics:
+  # Fluid density (kg/m^3)
+  density: 1.0
+  
+  # Dynamic viscosity (Pa*s)
+  dynamic_viscosity: 0.001
+  
+  # Reference velocity (m/s)
+  reference_velocity: 1.0
+  
+  # Reference length (m)
+  reference_length: 1.0

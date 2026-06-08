@@ -1,0 +1,57 @@
+{% extends 'solver/base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="gradient-text">CFD Surrogate Predictor</h1>
+    <p>Instant prediction of aerodynamic coefficients using Deep Learning</p>
+</div>
+
+<div class="layout-split">
+    <div class="glass-card input-section">
+        <h2>Flow Conditions</h2>
+        <form method="POST" id="surrogate-form">
+            {% csrf_token %}
+            <div class="form-grid">
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn primary-btn full-width" id="submit-btn">Predict Coefficients</button>
+            <div id="loading" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <p>Running forward pass...</p>
+            </div>
+        </form>
+    </div>
+
+    <div class="glass-card results-section">
+        <h2>Predictions</h2>
+        {% if results %}
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <span class="metric-label">Drag Coefficient (Cd)</span>
+                    <span class="metric-value">{{ results.drag|floatformat:4 }}</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Lift Coefficient (Cl)</span>
+                    <span class="metric-value">{{ results.lift|floatformat:4 }}</span>
+                </div>
+            </div>
+            
+            <div class="plots-grid">
+                <div class="plot-container">
+                    <h3>Coefficient Overview</h3>
+                    <img src="data:image/png;base64,{{ results.plot }}" alt="Coefficients Plot" class="result-plot">
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Enter flow conditions to predict aerodynamic coefficients.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

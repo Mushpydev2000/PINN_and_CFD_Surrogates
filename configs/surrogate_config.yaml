@@ -1,0 +1,221 @@
+# CFD Surrogate Model Configuration
+# ==================================
+
+project:
+  name: "CFD Surrogate Model"
+  description: "Deep neural network surrogate for CFD simulations"
+  version: "1.0.0"
+
+# Dataset Configuration
+dataset:
+  # Data generation parameters
+  generate_data: true
+  n_samples: 5000
+  
+  # Train/test/validation split
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  
+  # Input features
+  input_features: ["velocity", "reynolds_number"]
+  
+  # Output features (can include multiple)
+  output_features: ["drag_coefficient"]
+  
+  # Optional extended outputs
+  include_pressure_field: false
+  include_velocity_field: false
+  
+  # Data normalization
+  normalize_inputs: true
+  normalize_outputs: true
+  
+  # Data directory
+  data_dir: "data/generated"
+  
+  # Random seed
+  seed: 42
+
+# Surrogate Model Architecture Options
+models:
+  # Model type: 'mlp', 'deep_nn', 'fourier_neural_operator', 'deeponet'
+  model_type: "deep_nn"
+  
+  # MLP Configuration
+  mlp:
+    n_inputs: 2  # velocity, reynolds_number
+    n_outputs: 1  # drag_coefficient
+    n_hidden_layers: 4
+    n_neurons: 128
+    activation: "relu"
+    dropout_rate: 0.1
+    use_batch_norm: true
+  
+  # Deep Neural Network Configuration
+  deep_nn:
+    n_inputs: 2
+    n_outputs: 1
+    n_hidden_layers: 6
+    n_neurons: 256
+    activation: "relu"
+    dropout_rate: 0.2
+    use_batch_norm: true
+    use_skip_connections: true
+  
+  # Fourier Neural Operator (placeholder for future implementation)
+  fourier_neural_operator:
+    n_modes: 16
+    hidden_channels: 64
+    description: "Placeholder for Fourier Neural Operator implementation"
+  
+  # DeepONet (placeholder for future implementation)
+  deeponet:
+    branch_depth: 3
+    trunk_depth: 3
+    description: "Placeholder for DeepONet implementation"
+
+# Training Configuration
+training:
+  # Number of epochs
+  epochs: 1000
+  
+  # Batch size
+  batch_size: 128
+  
+  # Learning rate
+  learning_rate: 0.001
+  
+  # Learning rate scheduler
+  lr_scheduler: "exponential"
+  lr_decay_rate: 0.9995
+  
+  # Optimizer: 'adam', 'sgd', 'adamw'
+  optimizer: "adam"
+  
+  # Weight decay (L2 regularization)
+  weight_decay: 1e-5
+  
+  # Gradient clipping
+  gradient_clip: 1.0
+  
+  # Early stopping
+  early_stopping: true
+  early_stopping_patience: 100
+  early_stopping_metric: "val_loss"
+  
+  # Checkpoint frequency
+  checkpoint_freq: 50
+  
+  # Device: 'auto', 'cuda', 'cpu'
+  device: "auto"
+
+# Loss Function Configuration
+losses:
+  # Loss type: 'mse', 'l1', 'huber', 'smooth_l1'
+  loss_type: "mse"
+  
+  # Loss weights for multi-output models
+  output_weights: [1.0]  # Adjust for multiple outputs
+
+# Regularization
+regularization:
+  # L2 regularization weight
+  l2_weight: 1e-5
+  
+  # Dropout rate
+  dropout_rate: 0.2
+  
+  # Early stopping patience
+  early_stopping_patience: 100
+
+# Validation and Testing
+validation:
+  # Validation split ratio
+  val_split: 0.15
+  
+  # Number of validation samples
+  n_val_samples: 750
+  
+  # Compute validation metrics every N epochs
+  val_freq: 20
+  
+  # Test on held-out test set
+  evaluate_test: true
+
+# Metrics
+metrics:
+  # Metrics to compute: 'mse', 'rmse', 'mae', 'relative_error', 'r2'
+  compute_metrics: ["mse", "rmse", "mae", "relative_error", "r2"]
+  
+  # Relative error threshold (%)
+  relative_error_threshold: 5.0
+
+# Logging and Visualization
+logging:
+  # Logging directory
+  log_dir: "logs"
+  
+  # Log frequency (every N iterations)
+  log_freq: 50
+  
+  # TensorBoard logging
+  use_tensorboard: true
+  
+  # Verbose output
+  verbose: true
+  
+  # Save training plots
+  save_figures: true
+  figure_dir: "figures"
+
+# Model Saving and Loading
+model:
+  # Checkpoint directory
+  checkpoint_dir: "checkpoints"
+  
+  # Save best model
+  save_best: true
+  
+  # Save format: 'pt', 'onnx', 'jit'
+  save_format: "pt"
+  
+  # Save model every N epochs
+  save_freq: 50
+
+# Hyperparameter Optimization (placeholder)
+hyperparameter_optimization:
+  # Enable hyperparameter search: 'none', 'grid', 'random', 'bayesian'
+  method: "none"
+  
+  # Number of trials
+  n_trials: 50
+  
+  # Search space will be defined per trial
+
+# Physics-Informed Components
+physics:
+  # Add physical constraints to loss function
+  use_physics_constraints: false
+  
+  # Density of fluid (kg/m^3)
+  density: 1000.0
+  
+  # Dynamic viscosity (Pa*s)
+  dynamic_viscosity: 0.001
+  
+  # Reference area (m^2)
+  reference_area: 1.0
+  
+  # Reference velocity (m/s)
+  reference_velocity: 1.0
+
+# Data Augmentation
+data_augmentation:
+  # Enable data augmentation
+  enabled: false
+  
+  # Noise level for input perturbation
+  noise_level: 0.01
+  
+  # Other augmentation strategies (to be defined)

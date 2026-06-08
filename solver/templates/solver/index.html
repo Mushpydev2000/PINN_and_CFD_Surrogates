@@ -1,0 +1,22 @@
+{% extends 'solver/base.html' %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero-title">Physics-Informed Neural Networks <br>& CFD Surrogate Modeling</h1>
+    <p class="hero-subtitle">A Research-Grade Project for Scientific Machine Learning and Physics-Informed Deep Learning</p>
+</div>
+
+<div class="cards-grid">
+    <div class="glass-card">
+        <h3>PINN Solver</h3>
+        <p>Solves 2D incompressible Navier-Stokes equations without data by minimizing PDE residuals.</p>
+        <a href="{% url 'solver:pinn_solver' %}" class="btn primary-btn">Launch Solver</a>
+    </div>
+    
+    <div class="glass-card">
+        <h3>CFD Surrogate</h3>
+        <p>Fast neural network approximations of expensive CFD simulations for instant aerodynamic coefficient prediction.</p>
+        <a href="{% url 'solver:surrogate' %}" class="btn primary-btn">Launch Predictor</a>
+    </div>
+</div>
+{% endblock %}
