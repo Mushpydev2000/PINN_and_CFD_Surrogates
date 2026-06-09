@@ -65,7 +65,12 @@ class PINNService:
         )
         
         # Train for requested epochs
-        trainer.train(n_epochs=data['n_epochs'], n_interior=1000, n_boundary=400, log_interval=data['n_epochs']+1)
+        training_history = trainer.train(
+            n_epochs=data['n_epochs'],
+            n_interior=1000,
+            n_boundary=400,
+            log_freq=data['n_epochs'] + 1
+        )
         
         # 5. Inference & Plotting
         inference = PINNInference(model, device=device)
@@ -83,7 +88,7 @@ class PINNService:
         return {
             'velocity_plot': get_base64_plot(fig_vel),
             'pressure_plot': get_base64_plot(fig_p),
-            'final_loss': trainer.loss_history['total'][-1] if trainer.loss_history['total'] else 0.0
+            'final_loss': training_history['loss'][-1] if training_history['loss'] else 0.0
         }
 
 class SurrogateService:
