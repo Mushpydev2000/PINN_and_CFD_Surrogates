@@ -49,8 +49,8 @@ class TestFluidProperties:
         """Test Reynolds number computation."""
         re = WATER.reynolds_number(velocity=1.0, characteristic_length=0.1)
         
-        # For water: Re = 1.0 * 0.1 / 0.001 = 100
-        expected_re = 100.0
+        # For water: Re = ρ * U * L / μ = 1000 * 1.0 * 0.1 / 0.001 = 100000
+        expected_re = 100000.0
         assert abs(re - expected_re) < 1e-6
     
     def test_prandtl_number(self):
