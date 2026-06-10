@@ -10,3 +10,9 @@ services:
         value: "False"
       - key: DJANGO_SETTINGS_MODULE
         value: "webapp.settings"
+      - key: ALLOWED_HOSTS
+        value: "pinn-and-cfd-surrogates.onrender.com,.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://pinn-and-cfd-surrogates.onrender.com,https://*.onrender.com"
+      - key: SECRET_KEY
+        generateValue: true
