@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: pinn-cfd-surrogate
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn webapp.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "webapp.settings"

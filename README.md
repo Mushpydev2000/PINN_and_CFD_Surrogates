@@ -253,6 +253,32 @@ python core/main.py --mode web
 
 This command starts a lightweight local HTTP server and opens the project dashboard in your browser at `http://127.0.0.1:8000`.
 
+### Deployment
+
+The recommended production deployment path is Render for the full Django app. The repository includes ready-to-use configuration files:
+
+- `render.yaml` — Render service definition for a Python web service
+- `Dockerfile` — container image for running `gunicorn webapp.wsgi:application`
+- `requirements.txt` — contains `gunicorn` and `whitenoise` for production static file serving
+
+For Vercel, this repository adds a small redirect service from Vercel to Render. Vercel is not ideal for full Django hosting, so the Vercel deployment can act as a lightweight frontend redirect.
+
+#### Render
+
+1. Connect this repository to Render.
+2. Use `render.yaml` as the service configuration.
+3. Set `startCommand` to:
+
+```bash
+gunicorn webapp.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+```
+
+#### Vercel
+
+1. Add the Vercel project with `vercel.json`.
+2. Set the environment variable `RENDER_APP_URL` to your Render app URL.
+3. Deploy and use Vercel as a redirect to the Render-hosted application.
+
 #### Making Predictions
 
 ```python

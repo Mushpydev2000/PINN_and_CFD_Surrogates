@@ -212,6 +212,12 @@ def main():
         default='configs/surrogate_config.yaml',
         help='Path to surrogate config file'
     )
+    parser.add_argument(
+        '--port',
+        type=int,
+        default=8000,
+        help='Port to run the web dashboard on when using --mode web'
+    )
     
     args = parser.parse_args()
     
@@ -221,7 +227,7 @@ def main():
     try:
         if args.mode == 'web':
             logger.info("Starting local web dashboard...")
-            run_local_site()
+            run_local_site(port=args.port)
             return
 
         if args.mode in ['pinn', 'both']:
