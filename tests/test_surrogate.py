@@ -7,6 +7,7 @@ from core.surrogate import (
     CFDDatasetGenerator, CFDDataset, create_dataloaders,
     create_surrogate_model, MLPSurrogate, DeepSurrogate
 )
+from solver.services import SurrogateService
 
 
 class TestCFDDatasetGenerator:
@@ -34,6 +35,41 @@ class TestCFDDatasetGenerator:
         # Should not raise error
         cd = gen.cylinder_drag_coefficient(re_array)
         assert len(cd) == len(re_array)
+
+    def test_scalar_aerodynamic_coefficients(self):
+        """Test one-off web form scalar prediction inputs."""
+        gen = CFDDatasetGenerator(seed=42)
+        coeffs = gen.generate_aerodynamic_coefficients(
+            {
+                'velocity': 10.0,
+                'angle_of_attack': 5.0,
+                'reynolds_number': 100000.0,
+                'mach_number': 0.3,
+                'turbulence_intensity': 0.05,
+                'surface_roughness': 0.001,
+            }
+        )
+
+        assert coeffs['drag_coefficient'].shape == (1,)
+        assert coeffs['lift_coefficient'].shape == (1,)
+
+    def test_surrogate_service_returns_template_safe_scalars(self):
+        """Test the Django service returns Python floats for template filters."""
+        results = SurrogateService.run_surrogate_prediction(
+            {
+                'velocity': 10.0,
+                'angle_of_attack': 5.0,
+                'reynolds_number': 100000.0,
+                'mach_number': 0.3,
+                'turbulence_intensity': 0.05,
+                'surface_roughness': 0.001,
+                'model_type': 'deep',
+            }
+        )
+
+        assert isinstance(results['drag'], float)
+        assert isinstance(results['lift'], float)
+        assert results['plot']
 
 
 class TestCFDDataset:

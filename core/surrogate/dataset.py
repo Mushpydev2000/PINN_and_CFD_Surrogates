@@ -119,6 +119,7 @@ class CFDDatasetGenerator:
         Returns:
             Drag coefficient values
         """
+        reynolds_number = np.atleast_1d(np.asarray(reynolds_number, dtype=float))
         cd = np.zeros_like(reynolds_number)
         
         # Creeping flow regime (Re < 1)
@@ -156,6 +157,8 @@ class CFDDatasetGenerator:
         Returns:
             Lift coefficient values
         """
+        angle_of_attack = np.atleast_1d(np.asarray(angle_of_attack, dtype=float))
+
         # Convert to radians
         alpha_rad = np.radians(angle_of_attack)
         
@@ -191,6 +194,9 @@ class CFDDatasetGenerator:
         Returns:
             Corrected coefficients for compressible flow
         """
+        mach_number = np.atleast_1d(np.asarray(mach_number, dtype=float))
+        coefficient = np.atleast_1d(np.asarray(coefficient, dtype=float))
+
         # Avoid singularity at M = 1
         mach_sq = mach_number ** 2
         mach_sq = np.clip(mach_sq, 0, 0.99)
@@ -215,9 +221,9 @@ class CFDDatasetGenerator:
             - 'lift_coefficient'
             - 'pressure_coefficient'
         """
-        re = flow_conditions['reynolds_number']
-        aoa = flow_conditions['angle_of_attack']
-        m = flow_conditions['mach_number']
+        re = np.atleast_1d(np.asarray(flow_conditions['reynolds_number'], dtype=float))
+        aoa = np.atleast_1d(np.asarray(flow_conditions['angle_of_attack'], dtype=float))
+        m = np.atleast_1d(np.asarray(flow_conditions['mach_number'], dtype=float))
         
         # Base drag coefficient (Reynolds dependent)
         cd_base = self.cylinder_drag_coefficient(re)

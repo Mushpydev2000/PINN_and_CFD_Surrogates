@@ -93,41 +93,43 @@ class PINNService:
 
 class SurrogateService:
     @staticmethod
-    def run_surrogate_prediction(data):
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        
-        # Generate CFD dataset locally to train a small model for demonstration
-        # In a real scenario, this would load a pre-trained model.
-        generator = CFDDatasetGenerator(n_samples=500, seed=42)
-        dataset_df = generator.generate_dataset()
-        
-        input_features = ['velocity', 'angle_of_attack', 'reynolds_number', 'mach_number', 'turbulence_intensity', 'surface_roughness']
-        output_features = ['drag_coefficient', 'lift_coefficient']
-        
-        # A quick fake prediction based on the synthetic generation logic for demonstration
-        input_dict = {
-            'velocity': data['velocity'],
-            'angle_of_attack': data['angle_of_attack'],
-            'reynolds_number': data['reynolds_number'],
-            'mach_number': data['mach_number'],
-            'turbulence_intensity': data['turbulence_intensity'],
-            'surface_roughness': data['surface_roughness']
+    def _as_single_prediction_input(data):
+        return {
+            'velocity': np.array([float(data['velocity'])], dtype=float),
+            'angle_of_attack': np.array([float(data['angle_of_attack'])], dtype=float),
+            'reynolds_number': np.array([float(data['reynolds_number'])], dtype=float),
+            'mach_number': np.array([float(data['mach_number'])], dtype=float),
+            'turbulence_intensity': np.array([float(data['turbulence_intensity'])], dtype=float),
+            'surface_roughness': np.array([float(data['surface_roughness'])], dtype=float),
         }
+
+    @staticmethod
+    def _first_float(value):
+        return float(np.asarray(value, dtype=float).reshape(-1)[0])
+
+    @staticmethod
+    def run_surrogate_prediction(data):
+        # Use the synthetic CFD correlations as a lightweight surrogate until a
+        # trained checkpoint is wired into the web app.
+        generator = CFDDatasetGenerator(n_samples=500, seed=42)
+        input_dict = SurrogateService._as_single_prediction_input(data)
         
         # Using the actual generator logic to give physically plausible answers
         # in absence of a fully pre-trained model loading mechanism.
         coeffs = generator.generate_aerodynamic_coefficients(input_dict)
+        drag = SurrogateService._first_float(coeffs['drag_coefficient'])
+        lift = SurrogateService._first_float(coeffs['lift_coefficient'])
         
         # Create a simple bar plot to show the coefficients
         fig, ax = plt.subplots(figsize=(6, 4))
         categories = ['Drag Coefficient', 'Lift Coefficient']
-        values = [coeffs['drag_coefficient'], coeffs['lift_coefficient']]
+        values = [drag, lift]
         ax.bar(categories, values, color=['#ff9999','#66b3ff'])
         ax.set_ylabel('Coefficient Value')
         ax.set_title('Predicted Aerodynamic Coefficients')
         
         return {
-            'drag': coeffs['drag_coefficient'],
-            'lift': coeffs['lift_coefficient'],
+            'drag': drag,
+            'lift': lift,
             'plot': get_base64_plot(fig)
         }
